@@ -22,8 +22,10 @@ class TabelData {
     '1-3:55',
   ];
   TabelData() {
+    print(jsonTimetable);
     if(jsonTimetable != null && jsonTimetable['success']==1){
     for (int i = 0; i < 5; i++) {
+      if(jsonTimetable[i.toString()]!=null){
       for (int j = 0; j < jsonTimetable[i.toString()].length; j++) {
         if (slot.indexOf(jsonTimetable[i.toString()][j]['timing']) >= 0)
           ans[i][slot.indexOf(jsonTimetable[i.toString()][j]['timing'])] =
@@ -34,6 +36,7 @@ class TabelData {
                   jsonTimetable[i.toString()][j]['room'];
         else if (slotLab.indexOf(jsonTimetable[i.toString()][j]['timing']) >=
             0) {
+              print('aa');
           ans[i][slotLab.indexOf(jsonTimetable[i.toString()][j]['timing'])] =
               jsonTimetable[i.toString()][j]['subject']
                       .toString()
@@ -53,6 +56,7 @@ class TabelData {
               '\n' +
               jsonTimetable[i.toString()][j]['room'];
         }
+      }
       }
     }
     }

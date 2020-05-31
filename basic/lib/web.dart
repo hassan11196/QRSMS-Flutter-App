@@ -4,8 +4,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class WebFunctions {
+  static final storage = new FlutterSecureStorage();
+
   static PersistCookieJar persistentCookies;
   static final String url = "http://qrsms-v1.herokuapp.com";
   static final Dio _dio = Dio();
@@ -17,6 +21,7 @@ class WebFunctions {
 
   Future<Directory> get _localCoookieDirectory async {
     final path = await _localPath;
+    print(path);
     final Directory dir = new Directory('$path/cookies');
     await dir.create();
     return dir;
@@ -24,7 +29,7 @@ class WebFunctions {
 
   Future<String> _getCsrftoken() async {
     try {
-      String csrfTokenValue;
+      String csrfTokenValue ;
       final Directory dir = await _localCoookieDirectory;
       final cookiePath = dir.path;
       persistentCookies = new PersistCookieJar(dir: '$cookiePath');
@@ -48,15 +53,21 @@ class WebFunctions {
       _dio.interceptors
           .add(InterceptorsWrapper(onResponse: (Response response) {
         List<Cookie> cookies = persistentCookies.loadForRequest(Uri.parse(url));
+
         csrfTokenValue = cookies
             .firstWhere((c) => c.name == 'csrftoken', orElse: () => null)
             ?.value;
+        
         if (csrfTokenValue != null) {
           _dio.options.headers['X-CSRF-TOKEN'] =
               csrfTokenValue; //setting the csrftoken from the response in the headers
+           
+            
         }
         return response;
-      }));
+      },
+      ));
+      
       await _dio.get("/management/get_csrf");
       return csrfTokenValue;
     } catch (error, stacktrace) {
@@ -116,6 +127,8 @@ class WebFunctions {
   }
 
   static Future<String>  getRegisteredCourses() async {
+    print(await WebFunctions.storage.read(key: 'csrftoken'));
+
     Response response = await _dio.get("/student/registration/available_courses/");
     if (response.statusCode == 200)
       return response.data;
@@ -133,7 +146,6 @@ class WebFunctions {
         "csrfmiddlewaretoken": '$csrf',
       });
       Response response = await _dio.post("/student/postQR/", data: formData);
-      print('ab');
       return response.data;
     } on DioError catch (e) {
       print(e.response.statusCode);
@@ -145,6 +157,7 @@ class WebFunctions {
   }
 
   static Future<bool> logout() async {
+    
     try {
       final cookie = persistentCookies.loadForRequest(Uri.parse(url))[0];
       final csrf = cookie.toString().split('=')[1].split(';')[0];
@@ -169,5 +182,5 @@ class WebFunctions {
       return false;
     }
     return false;
-  }
+   }
 }

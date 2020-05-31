@@ -7,15 +7,16 @@ import 'package:basic/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:basic/web.dart';
 import 'package:basic/screens/timetable.dart';
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 GlobalKey<SGPAState> globalKey = GlobalKey();
-                
+
 class Home extends StatefulWidget {
   String title;
   Widget widgetForBody;
-  var icon ;
-    
+  var icon;
+
   Home({Key key, this.title, this.widgetForBody}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -31,18 +32,19 @@ class _Home extends State<Home> {
   @override
   initState() {
     super.initState();
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project   
-     // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    // If you have skipped STEP 3 then change app_icon to @mipmap/ic_launcher
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon'); 
+        new AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        );
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
   }
-  
+
   Future<bool> _onWillPop() {
     return showDialog(
           context: context,
@@ -64,105 +66,109 @@ class _Home extends State<Home> {
         ) ??
         false;
   }
+
   @override
   Widget build(BuildContext context) {
-    
-    return 
-      WillPopScope(
-      onWillPop: _onWillPop,
-      child:Scaffold(
-      drawerScrimColor: Color.fromRGBO(96, 114, 150, 0.7),
-      appBar: AppBar(
-        actions: <Widget>[
-            // action button
-            IconButton(
-              icon: Icon(widget.icon),
-              onPressed: () {
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          drawerScrimColor: Color.fromRGBO(96, 114, 150, 0.7),
+          appBar: AppBar(
+            actions: <Widget>[
+              // action button
+              IconButton(
+                icon: Icon(widget.icon),
+                onPressed: () {
                   globalKey.currentState.registeredCourses;
-              },
-            )],
-        title: Center(
-          child: Text(widget.title),
-        ),
-        backgroundColor: Colors.cyan,
-      ),
-      body: widget.widgetForBody,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            _createHeader(),
-            _createDrawerItem(
-                icon: Icons.keyboard_arrow_up,
-                text: 'Login',
-                onTap: () => !checklogin()
-                    ?setState((){
-                      widget.title='QRSMS Login';
-                      widget.widgetForBody=Login();
-                       widget.icon = null;
-                    }):null 
-                    ),
-            _createDrawerItem(
-                icon: Icons.home,
-                text: 'Home',
-                onTap: () => checklogin() ?
-                    
-                    setState((){
-                      widget.title= 'Home'; widget.widgetForBody= Homepage();
-                       widget.icon = null;
-                    }):null 
-                    ),
-            _createDrawerItem(
-                icon: Icons.center_focus_strong,
-                text: 'Mark Your Attendance',
-                onTap: () => 
-                    checklogin()?setState((){
-                      widget.title= 'Attendance'; widget.widgetForBody= Attendance();
-                       widget.icon = null;
-                    }):null),
-            _createDrawerItem(
-                icon: Icons.timeline,
-                text: 'Time Table',
-                onTap: () {
-                  if (checklogin()) {
-                   setState(() {
-        widget.title='Time Table'; widget.widgetForBody= Timetable();
-        widget.icon = null;
-    });
-                  }
-                }),
-            _createDrawerItem(
-                icon: Icons.keyboard,
-                text: 'GPA Calculator',
-                onTap: () => setState((){
-                      widget.title= 'Gpa Calculator'; widget.widgetForBody= SGPA(key: globalKey,);
-                      checklogin()? widget.icon = Icons.code:widget.icon =null;
-                    })),
-                        
-                
-                      
-            _createDrawerItem(
-              icon: Icons.keyboard_arrow_down,
-              text: 'Logout',
-              onTap: () async {
-                if (checklogin()) {
-                  if (await logout()) {
-                    setState(() {
-                      widget.title = 'QRSMS Login';
-                      widget.widgetForBody = Login();
-                       widget.icon = null;
-                    });
-                  }
-                }
-              },
+                },
+              )
+            ],
+            title: Center(
+              child: Text(widget.title),
             ),
-          ],
-        ),
-      ),
-    ));
+            backgroundColor: Colors.cyan,
+          ),
+          body: widget.widgetForBody,
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                _createHeader(),
+                _createDrawerItem(
+                    icon: Icons.keyboard_arrow_up,
+                    text: 'Login',
+                    onTap: () => !checklogin()
+                        ? setState(() {
+                            widget.title = 'QRSMS Login';
+                            widget.widgetForBody = Login();
+                            widget.icon = null;
+                          })
+                        : null),
+                _createDrawerItem(
+                    icon: Icons.home,
+                    text: 'Home',
+                    onTap: () => checklogin()
+                          
+                        ? setState(() {
+                            widget.title = 'Home';
+                            widget.widgetForBody = Homepage();
+                            widget.icon = null;
+                          })
+                        : null),
+                _createDrawerItem(
+                    icon: Icons.center_focus_strong,
+                    text: 'Mark Your Attendance',
+                    onTap: () => checklogin()
+                        ? setState(() {
+                            widget.title = 'Attendance';
+                            widget.widgetForBody = Attendance();
+                            widget.icon = null;
+                          })
+                        : null),
+                _createDrawerItem(
+                    icon: Icons.timeline,
+                    text: 'Time Table',
+                    onTap: () {
+                      if (checklogin()) {
+                        setState(() {
+                          widget.title = 'Time Table';
+                          widget.widgetForBody = Timetable();
+                          widget.icon = null;
+                        });
+                      }
+                    }),
+                _createDrawerItem(
+                    icon: Icons.keyboard,
+                    text: 'GPA Calculator',
+                    onTap: () => setState(() {
+                          widget.title = 'Gpa Calculator';
+                          widget.widgetForBody = SGPA(
+                            key: globalKey,
+                          );
+                          checklogin()
+                              ? widget.icon = Icons.code
+                              : widget.icon = null;
+                        })),
+                _createDrawerItem(
+                  icon: Icons.keyboard_arrow_down,
+                  text: 'Logout',
+                  onTap: () async {
+                    if (checklogin()) {
+                      if (await logout()) {
+                        setState(() {
+                          widget.title = 'QRSMS Login';
+                          widget.widgetForBody = Login();
+                          widget.icon = null;
+                        });
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ));
   }
-
-  
 
   Future<bool> logout() async {
     return await WebFunctions.logout();
@@ -207,19 +213,19 @@ class _Home extends State<Home> {
       ),
     );
   }
-
-  
 }
 
 bool checklogin() {
-    try {
-      final cookies = WebFunctions.persistGetter.loadForRequest(Uri.parse(WebFunctions.urlGetter));
-      return cookies.isNotEmpty ? true : false;
-    } catch (loadForRequest) {
-      return false;
-    }
+  try {
+    final cookies = WebFunctions.persistGetter
+        .loadForRequest(Uri.parse(WebFunctions.urlGetter));
+    print(cookies);
+    return cookies.isNotEmpty ? true : false;
+  } catch (loadForRequest) {
+    print(loadForRequest);
+    return false;
   }
-
+}
 
 Future showNotificationWithDefaultSound(String notification) async {
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
@@ -235,4 +241,4 @@ Future showNotificationWithDefaultSound(String notification) async {
     platformChannelSpecifics,
     payload: 'Default_Sound',
   );
-  }
+}

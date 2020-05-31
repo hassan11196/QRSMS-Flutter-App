@@ -26,7 +26,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-   
     final emailField = TextFormField(
         obscureText: false,
         style: style,
@@ -140,25 +139,31 @@ class _LoginState extends State<Login> {
       String id, String password, BuildContext context) async {
     WebFunctions w1 = WebFunctions();
     String response = await w1.getSessionId(id, password);
-    jsonResponse = jsonDecode(response.split('/')[0]);
-    jsonResponseStd = jsonDecode(response.split('/')[1]);
-    if (jsonResponse["status"] == "Invalid Username of Password.") {
-      setState(() {
-        isPressed = false;
-        error = jsonResponse["status"];
-      });
+    if (response != null) {
+      jsonResponse = jsonDecode(response.split('/')[0]);
+      jsonResponseStd = jsonDecode(response.split('/')[1]);
+      if (jsonResponse["status"] == "Invalid Username of Password.") {
+        setState(() {
+          isPressed = false;
+          error = jsonResponse["status"];
+        });
+      } else {
+        makeRequestT();
+        setState(() {
+          isPressed = false;
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Home(title: 'Home', widgetForBody: Homepage())),
+          );
+        });
+      }
     } else {
-      makeRequestT();
       setState(() {
         isPressed = false;
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  Home(title: 'Home', widgetForBody: Homepage())),
-        );
-        
+        error = 'Check your internet connectivity';
       });
     }
   }
@@ -179,7 +184,8 @@ String validatePassword(String value) {
   } else
     return null;
 }
+
 Future<void> makeRequestT() async {
-    String response = await WebFunctions.getTimetable();
-    jsonTimetable = jsonDecode(response);      
-  }
+  String response = await WebFunctions.getTimetable();
+  jsonTimetable = jsonDecode(response);
+}
