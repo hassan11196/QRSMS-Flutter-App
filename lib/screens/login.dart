@@ -5,7 +5,7 @@ import 'package:basic/web.dart';
 import 'dart:convert';
 
 import 'package:basic/screens/home.dart';
-
+import 'package:sweetalert/sweetalert.dart';
 bool isPressed = false;
 
 var jsonResponse;
@@ -142,10 +142,14 @@ class _LoginState extends State<Login> {
     if (response != null) {
       jsonResponse = jsonDecode(response.split('/')[0]);
       jsonResponseStd = jsonDecode(response.split('/')[1]);
-      if (jsonResponse["status"] == "Invalid Username of Password.") {
+      if (jsonResponse["status"] == "Invalid Username of Password." || jsonResponse["status"] == 'User Logged in is Not a Student'|| jsonResponse['status'] == 'message'|| jsonResponse["message"] == 'Invalid Id Or Password') {
         setState(() {
           isPressed = false;
           error = jsonResponse["status"];
+            SweetAlert.show(context,
+                      title: 'Error',
+                      subtitle: jsonResponse["status"],
+                      style: SweetAlertStyle.error);
         });
       } else {
         // makeRequestT();

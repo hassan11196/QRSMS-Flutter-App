@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:basic/web.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+
+import 'package:sweetalert/sweetalert.dart';
 
 class Attendance extends StatefulWidget {
   @override
@@ -47,7 +50,11 @@ class _AttendanceState extends State<Attendance> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return 
+        
+        
+        AlertDialog(
+        
           title: Text(status,style: TextStyle(fontSize:20.0,fontWeight: FontWeight.bold),),
           content: Text(message),
           actions: <Widget>[
@@ -72,6 +79,19 @@ class _AttendanceState extends State<Attendance> {
     String message = json['message'];
     String status = 'Attendance';
 
-    _showDialog(message, status);
+    if(json['message'] == 'Attendance Marked' || json['message'] == 'Attendance Already Marked'){
+    SweetAlert.show(context,
+                      title: status,
+                      subtitle: message,
+                      style: SweetAlertStyle.success);
+    }else{
+      SweetAlert.show(context,
+                      title: status,
+                      subtitle: message,
+                      style: SweetAlertStyle.error);
+    }
+
+    
+    // _showDialog(message, status);
   }
 }
