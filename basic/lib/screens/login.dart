@@ -148,7 +148,7 @@ class _LoginState extends State<Login> {
           error = jsonResponse["status"];
         });
       } else {
-        makeRequestT();
+        // makeRequestT();
         setState(() {
           isPressed = false;
           Navigator.pop(context);
@@ -186,6 +186,6 @@ String validatePassword(String value) {
 }
 
 Future<void> makeRequestT() async {
-  String response = await WebFunctions.getTimetable();
-  jsonTimetable = jsonDecode(response);
+  // String response = await WebFunctions.getTimetable();
+  // jsonTimetable = jsonDecode(response);
 }
