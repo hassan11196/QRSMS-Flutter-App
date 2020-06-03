@@ -38,12 +38,17 @@ build: &build
       - yes | sdkmanager --update
       # - yes | sdkmanager --licenses
       - if [[ $TRAVIS_TAG == "" ]]; then flutter build apk; else flutter build apk --build-name $BUILD_NAME --build-number $BUILD_NUMBER; fi
+    
+    before_deploy:
+      - git tag $TRAVIS_TAG  
     deploy:
       - provider: releases
         api_key: $GITHUB_TOKEN
         file: build/app/outputs/apk/release/app-release.apk
         skip_cleanup: true
         name: $TRAVIS_TAG
+        on:
+          tags: true
         
     after_deploy:
         - git branch $TRAVIS_TAG
