@@ -147,8 +147,8 @@ class _LoginState extends State<Login> {
           isPressed = false;
           error = jsonResponse["status"];
             SweetAlert.show(context,
-                      title: 'Error',
-                      subtitle: jsonResponse["status"],
+                      title: 'Login Error',
+                      subtitle: jsonResponse["message"],
                       style: SweetAlertStyle.error);
         });
       } else {
