@@ -35,6 +35,7 @@ build: &build
       - export BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
     script:
       - flutter doctor --android-licenses
+      - yes | sdkmanager --update
       - yes | sdkmanager --licenses
       - if [[ $TRAVIS_TAG == "" ]]; then flutter build apk; else flutter build apk --build-name $BUILD_NAME --build-number $BUILD_NUMBER; fi
     deploy:

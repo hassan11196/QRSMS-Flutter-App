@@ -67,15 +67,15 @@ class Homepage extends StatelessWidget {
                           )
                         ]),
                         SizedBox(height: 5.0),
-                        Row(children: <Widget>[
-                          Text('Campus : ', style: heading),
-                          Expanded(
-                            child: Text(
-                              object.campus,
-                              style: content,
-                            ),
-                          )
-                        ]),
+                        // Row(children: <Widget>[
+                        //   Text('Campus : ', style: heading),
+                        //   Expanded(
+                        //     child: Text(
+                        //       object.campus,
+                        //       style: content,
+                        //     ),
+                        //   )
+                        // ]),
                         SizedBox(height: 5.0),
                         Row(children: <Widget>[
                           Text('Batch : ', style: heading),
