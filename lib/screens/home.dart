@@ -125,18 +125,18 @@ class _Home extends State<Home> {
                             widget.icon = null;
                           })
                         : null),
-                _createDrawerItem(
-                    icon: Icons.timeline,
-                    text: 'Time Table',
-                    onTap: () {
-                      if (checklogin()) {
-                        setState(() {
-                          widget.title = 'Time Table';
-                          widget.widgetForBody = Timetable();
-                          widget.icon = null;
-                        });
-                      }
-                    }),
+                // _createDrawerItem(
+                //     icon: Icons.timeline,
+                //     text: 'Time Table',
+                //     onTap: () {
+                //       if (checklogin()) {
+                //         setState(() {
+                //           widget.title = 'Time Table';
+                //           widget.widgetForBody = Timetable();
+                //           widget.icon = null;
+                //         });
+                //       }
+                //     }),
                 _createDrawerItem(
                     icon: Icons.keyboard,
                     text: 'GPA Calculator',

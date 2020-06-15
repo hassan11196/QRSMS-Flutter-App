@@ -104,7 +104,8 @@ class Homepage extends StatelessWidget {
                         Row(children: <Widget>[
                           Text('Current Semester : ', style: heading),
                           Text(
-                            object.curent_sems.toString(),
+                            // object.curent_sems.toString(),
+                            'Spring 2020',
                             style: content,
                           )
                         ]),
